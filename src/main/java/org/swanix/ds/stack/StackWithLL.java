@@ -13,18 +13,19 @@ public class StackWithLL {
     }
 
     public void push(int data) {
-        Node dataNode = new Node();
-        dataNode.data = data;
-        dataNode.next = curr;
-        curr = dataNode;
+        Node node = new Node();
+        node.data = data;
+        node.next = curr;
+        curr = node;
+        System.out.println(data + " Pushed to Top");
     }
 
     public int pop() {
         if (!isEmpty()) {
-            int noPop = curr.data;
+            int data = curr.data;
             curr = curr.next;
-            System.out.println(noPop + " popped out of stack");
-            return noPop;
+            System.out.println(data + " popped out of stack");
+            return data;
         } else {
             System.out.println("Stack is Empty!!!");
             return -1;
