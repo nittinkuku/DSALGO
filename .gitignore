@@ -1,2 +1,17 @@
 # Project exclude paths
 /.gradle/
+.gitignore
+checkstyle-idea.xml
+checkstyleidea-libs/
+codeStyles
+compiler.xml
+gradle.xml
+jarRepositories.xml
+misc.xml
+modules/
+sonarlint-state.xml
+sonarlint.xml
+sonarlint/
+uiDesigner.xml
+vcs.xml
+build/
