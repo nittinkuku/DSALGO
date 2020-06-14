@@ -3,6 +3,7 @@ package org.swanix.algo.sorting;
 import org.swanix.util.DSAlgoUtil;
 
 public class SelectionSort {
+    //takes almost same time in every condition. Takes same amount of time on fully unsorted, partially sorted, array with all keys same
     public void sort(int[] array) {
 
         int sizeOfArray = array.length;

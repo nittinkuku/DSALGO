@@ -3,7 +3,7 @@ package org.swanix.algo.sorting;
 import static org.swanix.util.DSAlgoUtil.swap;
 
 public class InsertionSort {
-
+// works faster if the array is partially sorted
     public void sort(int[] array) {
         int sizeOfArray = array.length;
 
