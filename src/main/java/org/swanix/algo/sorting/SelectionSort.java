@@ -4,7 +4,7 @@ import org.swanix.util.DSAlgoUtil;
 
 public class SelectionSort {
     //takes almost same time in every condition. Takes same amount of time on fully unsorted, partially sorted, array with all keys same
-    public void sort(int[] array) {
+    public int[] sort(int[] array) {
 
         int sizeOfArray = array.length;
 
@@ -18,6 +18,8 @@ public class SelectionSort {
             }
             DSAlgoUtil.swap(array, i, indexOfMin);
         }
+
+        return  array;
     }
 
 }
