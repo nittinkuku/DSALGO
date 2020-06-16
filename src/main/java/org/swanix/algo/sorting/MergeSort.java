@@ -19,7 +19,7 @@ public class MergeSort {
         merge(array, lo, mid, hi);  // Merge results (code on page 271).
     }
 
-    private static void merge(int[] array, int lo, int mid, int hi) {  // Merge a[lo..mid] with a[mid+1..hi].
+    public static void merge(int[] array, int lo, int mid, int hi) {  // Merge a[lo..mid] with a[mid+1..hi].
         int i = lo, j = mid + 1;
 
         for (int k = lo; k <= hi; k++) {  // Copy a[lo..hi] to aux[lo..hi].
