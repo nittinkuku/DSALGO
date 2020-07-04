@@ -6,18 +6,21 @@ public class HeapSort {
     private int[] array;
     private int size;
 
-    public void sort(){
-        for(int k=size/2;k>=1;k--){
-            sink(array,k,size);
+    public void sort() {
+        int n = size;
+
+        for (int k = n / 2; k >= 1; k--) {
+            sink(array, k, n);
         }
 
-        while(size>1){
-            DSAlgoUtil.swap(array,1,size);
-            sink(array,1,--size);
+        while (n > 1) {
+            DSAlgoUtil.swap(array, 1, n);
+            n--;
+            sink(array, 1, n);
         }
     }
 
-    private void sink(int[] array,int k,int size) {
+    private void sink(int[] array, int k, int size) {
         while (2 * k <= size) {
             int j = 2 * k;
             if (j < size && array[j] < array[j + 1]) {
