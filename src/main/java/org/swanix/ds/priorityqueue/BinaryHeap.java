@@ -3,24 +3,24 @@ package org.swanix.ds.priorityqueue;
 import org.swanix.util.DSAlgoUtil;
 
 public class BinaryHeap {
-    private int index;
+    private int size;
     private int[] array;
 
     public void insert(int data) {
-        array[++index] = data;
-        swim(index);
+        array[++size] = data;
+        swim(size);
     }
 
     public int delMax() {
         int max = array[1];
-        DSAlgoUtil.swap(array, 1, index--);
+        DSAlgoUtil.swap(array, 1, size--);
         sink(1);
-        array[index + 1] = -1;
+        array[size + 1] = -1;
         return max;
     }
 
     public boolean isEmpty(){
-        return index==0;
+        return size==0;
     }
 
     private void swim(int k) {
@@ -31,9 +31,9 @@ public class BinaryHeap {
     }
 
     private void sink(int k) {
-        while (2 * k <= index) {
+        while (2 * k <= size) {
             int j = 2 * k;
-            if (j < index && array[j] < array[j + 1]) {
+            if (j < size && array[j] < array[j + 1]) {
                 j++;
             }
             if (!(array[k] < array[j])) {
