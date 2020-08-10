@@ -12,12 +12,10 @@ public class SingleLinkedList {
         Node node = new Node();
         node.data = data;
 
-        if (head == null) {
-            head = node;
-        } else {
+        if (head != null) {
             node.next = head;
-            head = node;
         }
+        head = node;
     }
 
     private void insertAtEnd(int data) {
@@ -68,15 +66,36 @@ public class SingleLinkedList {
     }
 
     private void reverseLinkedList() {
+        if (head != null) {
+            Node curr = head;
+            Node prev = null;
 
+            while (curr!= null) {
+                Node temp = curr.next;
+                curr.next = prev;
+                prev = curr;
+                curr = temp;
 
+            }
+            head = prev;
+        }
     }
 
     private void print() {
-        System.out.println("Printing Linked List :");
+        System.out.println("\nPrinting Linked List :");
         for (Node temp = head; temp != null; temp = temp.next) {
-            System.out.println("LinkedList : " + temp.data);
+            System.out.print(temp.data + " -> ");
         }
+    }
+
+    public static void main(String[] args) {
+        SingleLinkedList singleLinkedList = new SingleLinkedList();
+        singleLinkedList.insertAtEnd(1);
+        singleLinkedList.insertAtEnd(2);
+
+        singleLinkedList.print();
+        singleLinkedList.reverseLinkedList();
+        singleLinkedList.print();
     }
 
 }
