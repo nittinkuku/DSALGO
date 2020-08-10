@@ -16,17 +16,6 @@ public class BinarySearchTree {
         }
     }
 
-    public int size() {
-        return size(root);
-    }
-
-    public int size(Node x) {
-        if (x == null) {
-            return 0;
-        }
-        return x.count;
-    }
-
     public void put(int key, int val) {
         root = put(root, key, val);
     }
@@ -58,49 +47,6 @@ public class BinarySearchTree {
             }
         }
         return -1;
-    }
-
-    public int floor(int key) {
-        Node x = floor(root, key);
-        if (x == null) {
-            return -1;
-        }
-        return x.key;
-    }
-
-    private Node floor(Node x, int key) {
-        if (x == null) {
-            return null;
-        }
-        if (x.key == key) {
-            return x;
-        }
-        if (x.key > key) {
-            return floor(x.left, key);
-        }
-        Node t = floor(x.right, key);
-        if (t != null) {
-            return t;
-        } else {
-            return x;
-        }
-    }
-
-    public int rank(int key) {
-        return rank(root, key);
-    }
-
-    private int rank(Node x, int key) {
-        if (x == null) {
-            return 0;
-        }
-        if (key < x.key) {
-            return rank(x.left, key);
-        } else if (key > x.key) {
-            return 1 + size(x.left) + rank(x.right, key);
-        } else {
-            return size(x.left);
-        }
     }
 
     public void inorder() {
@@ -142,6 +88,100 @@ public class BinarySearchTree {
         System.out.println(x.key);
     }
 
+    public int size() {
+        return size(root);
+    }
+
+    public int size(Node x) {
+        if (x == null) {
+            return 0;
+        }
+        return x.count;
+    }
+
+    public int min() {
+        Node x = min(root);
+        if (x == null) {
+            return -1;
+        } else {
+            return x.val;
+        }
+    }
+
+    private Node min(Node x) {
+        if (x == null) {
+            return null;
+        } else {
+            while (x.left != null) {
+                x = x.left;
+            }
+            return x;
+        }
+    }
+
+    public int max() {
+        Node x = max(root);
+        if (x == null) {
+            return -1;
+        } else {
+            return x.val;
+        }
+    }
+
+    private Node max(Node x) {
+        if (x == null) {
+            return null;
+        } else {
+            while (x.right != null) {
+                x = x.right;
+            }
+            return x;
+        }
+    }
+
+    public int rank(int key) {
+        return rank(root, key);
+    }
+
+    private int rank(Node x, int key) {
+        if (x == null) {
+            return 0;
+        }
+        if (key < x.key) {
+            return rank(x.left, key);
+        } else if (key > x.key) {
+            return 1 + size(x.left) + rank(x.right, key);
+        } else {
+            return size(x.left);
+        }
+    }
+
+    public int floor(int key) {
+        Node x = floor(root, key);
+        if (x == null) {
+            return -1;
+        }
+        return x.key;
+    }
+
+    private Node floor(Node x, int key) {
+        if (x == null) {
+            return null;
+        }
+        if (x.key == key) {
+            return x;
+        }
+        if (x.key > key) {
+            return floor(x.left, key);
+        }
+        Node t = floor(x.right, key);
+        if (t != null) {
+            return t;
+        } else {
+            return x;
+        }
+    }
+
     public void deleteMin() {
         root = deleteMin(root);
     }
@@ -173,7 +213,7 @@ public class BinarySearchTree {
             }
 
             Node t = x;
-            //x = min(t.right);
+            x = min(t.right);
             x.right = deleteMin(t.right);
             x.left = t.left;
         }
