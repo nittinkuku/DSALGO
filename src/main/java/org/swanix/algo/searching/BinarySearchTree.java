@@ -1,14 +1,12 @@
 package org.swanix.algo.searching;
 
 public class BinarySearchTree {
-    Node root;
+    private Node root;
 
     private class Node {
         private int key;
         private int val;
-        private Node left;
-        private Node right;
-        private int count;
+        private Node left, right;
 
         public Node(int key, int val) {
             this.key = key;
@@ -31,7 +29,6 @@ public class BinarySearchTree {
         } else {
             x.val = val;
         }
-        x.count = 1 + size(x.left) + size(x.right);
         return x;
     }
 
@@ -96,7 +93,7 @@ public class BinarySearchTree {
         if (x == null) {
             return 0;
         }
-        return x.count;
+        return 1 + size(x.left) + size(x.right);
     }
 
     public int min() {
@@ -191,7 +188,6 @@ public class BinarySearchTree {
             return x.right;
         }
         x.left = deleteMin(x.left);
-        x.count = 1 + size(x.left) + size(x.right);
         return x;
     }
 
@@ -217,7 +213,7 @@ public class BinarySearchTree {
             x.right = deleteMin(t.right);
             x.left = t.left;
         }
-        x.count = 1 + size(x.left) + size(x.right);
+
         return x;
     }
 
