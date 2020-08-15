@@ -40,7 +40,7 @@ public class QuickSort {
     }
 
 
-    private static void threeWayQuicksort(int[] a, int lo, int hi) {  // See page 289 for public sort() that calls this method.
+    private static void threeWayQuicksort(int[] a, int lo, int hi) {
         if (hi <= lo) return;
         int lt = lo, i = lo + 1, gt = hi;
         int v = a[lo];
