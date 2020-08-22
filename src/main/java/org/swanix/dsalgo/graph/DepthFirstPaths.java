@@ -10,6 +10,7 @@ public class DepthFirstPaths {
     private int s;
 
     public DepthFirstPaths(Graph graph, int s) {
+        this.s = s;
         marked = new boolean[graph.vertices()];
         edgeTo = new int[graph.edges()];
         for (int i = 0; i < marked.length; i++) {

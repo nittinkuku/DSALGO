@@ -6,8 +6,10 @@ import java.util.Queue;
 public class BreadthFirstPaths {
     private boolean[] marked;
     private int[] edgeTo;
+    private int s;
 
     public BreadthFirstPaths(Graph graph, int s) {
+        this.s = s;
         marked = new boolean[graph.vertices()];
         edgeTo = new int[graph.edges()];
         for (int i = 0; i < marked.length; i++) {
