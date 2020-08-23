@@ -1,6 +1,6 @@
 package org.swanix.prog;
 
-import org.swanix.algo.sorting.QuickSort;
+import org.swanix.dsalgo.sorting.QuickSort;
 
 public class KthLargestInArray {
 
