@@ -1,4 +1,4 @@
-package org.swanix.dsalgo.graph;
+package org.swanix.dsalgo.graph.undirected;
 
 import java.util.ArrayList;
 import java.util.List;

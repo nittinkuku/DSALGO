@@ -1,4 +1,4 @@
-package org.swanix.dsalgo.graph;
+package org.swanix.dsalgo.graph.undirected;
 
 public class ConnectedComponent {
     private boolean[] marked;
