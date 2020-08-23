@@ -1,7 +1,5 @@
 package org.swanix.dsalgo.graph.undirected;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Stack;
 
 public class DepthFirstPaths {
@@ -36,9 +34,9 @@ public class DepthFirstPaths {
         return marked[v];
     }
 
-    public List<Integer> pathTo(int v) {
+    public Stack<Integer> pathTo(int v) {
         if (!hasPathTo(v)) {
-            return Collections.emptyList();
+            return null;
         }
         Stack<Integer> path = new Stack<>();
         for (int x = v; x != s; x = edgeTo[x]) {

@@ -1,6 +1,5 @@
 package org.swanix.dsalgo.graph.directed;
 
-import java.util.List;
 import java.util.Stack;
 
 public class DepthFirstOrder {
@@ -27,7 +26,7 @@ public class DepthFirstOrder {
         }
     }
 
-    public List<Integer> reversePost() {
+    public Stack<Integer> reversePost() {
         return reversePost;
     }
 }
