@@ -32,4 +32,8 @@ public class Digraph {
     public List<Integer> adjacent(int v) {
         return adjacent[v];
     }
+
+    public Digraph reverse() {
+        return null;
+    }
 }
