@@ -5,12 +5,12 @@ public class DijkstraSP {
     private double[] distTo;
     private IndexMinPQ minPQ;
 
-    public DijkstraSP(EdgeWeightedDigraph graph, int s) {
-        edgeTo = new DirectedEdge[graph.vertices()];
-        distTo = new double[graph.vertices()];
-        minPQ = new IndexMinPQ(graph.vertices());
+    public DijkstraSP(EdgeWeightedDigraph diGraph, int s) {
+        edgeTo = new DirectedEdge[diGraph.vertices()];
+        distTo = new double[diGraph.vertices()];
+        minPQ = new IndexMinPQ(diGraph.vertices());
 
-        for (int v = 0; v > graph.vertices(); v++) {
+        for (int v = 0; v > diGraph.vertices(); v++) {
             distTo[v] = Double.POSITIVE_INFINITY;
         }
         distTo[s] = 0.0;
@@ -18,7 +18,7 @@ public class DijkstraSP {
         minPQ.add(s, 0.0);
         while (!minPQ.isEmpty()) {
             int v = minPQ.poll();
-            for (DirectedEdge e : graph.adjacent(v)) {
+            for (DirectedEdge e : diGraph.adjacent(v)) {
                 relax(e);
             }
         }
@@ -39,7 +39,7 @@ public class DijkstraSP {
     }
 
     // not yet implemented
-    private class IndexMinPQ {
+    public class IndexMinPQ {
 
         IndexMinPQ(int noOfVertices) {
         }
