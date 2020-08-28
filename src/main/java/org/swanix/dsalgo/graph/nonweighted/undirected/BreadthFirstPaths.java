@@ -1,4 +1,4 @@
-package org.swanix.dsalgo.graph.undirected;
+package org.swanix.dsalgo.graph.nonweighted.undirected;
 
 import java.util.ArrayDeque;
 import java.util.Queue;

@@ -1,4 +1,4 @@
-package org.swanix.dsalgo.graph.weighted;
+package org.swanix.dsalgo.graph.weighted.undirected;
 
 public class Edge implements Comparable<Edge> {
     private final int v, w;

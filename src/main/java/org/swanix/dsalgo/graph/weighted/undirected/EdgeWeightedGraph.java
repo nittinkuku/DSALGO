@@ -1,4 +1,4 @@
-package org.swanix.dsalgo.graph.weighted;
+package org.swanix.dsalgo.graph.weighted.undirected;
 
 import java.util.ArrayList;
 import java.util.List;

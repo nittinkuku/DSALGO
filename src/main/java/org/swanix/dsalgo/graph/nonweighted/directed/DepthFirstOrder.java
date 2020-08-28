@@ -1,4 +1,4 @@
-package org.swanix.dsalgo.graph.directed;
+package org.swanix.dsalgo.graph.nonweighted.directed;
 
 import java.util.Stack;
 
