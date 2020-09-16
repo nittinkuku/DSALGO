@@ -224,8 +224,7 @@ Streams are an update to the java API that lets you manipulate collections of da
     args                :   Comparator<T>  
     Function descriptor :   (T, T) -> int         
      
-    eg.        long noOfElements = numbers.stream()
-                                           .count; 
+    eg.        
 
 #####ForEach
     The forEach method ...  
@@ -236,8 +235,7 @@ Streams are an update to the java API that lets you manipulate collections of da
     args                :   Consumer<T>  
     Function descriptor :   T -> void         
      
-    eg.        long noOfElements = numbers.stream()
-                                           .count; 
+    eg.        
                                                             
 #####Collect
      The collect method ....
@@ -247,12 +245,37 @@ Streams are an update to the java API that lets you manipulate collections of da
     Return Type         :   R            
     args                :   Collector<T, A, R>            
      
-    eg.        long noOfElements = numbers.stream()
-                                           .count;                                              
+    eg.                                                      
 
+####Primitive Stream
+There are primitive streams to avoid autoboxing and to provide some specialized functions.
 
+#####Converting General Stream to Primitive Stream
+    int calories = menu.stream()
+                       .mapToInt(Dish::getCalories) // converts to IntStream
+                       .sum();
+                       
+#####Converting Primitive Stream to General Stream
+    IntStream intStream = menu.stream().mapToInt(Dish::getCalories):
+    Stream<Integer> stream1 = intStream.boxed();
+    Stream<Integer> stream2 = intStream.mapToObj(Integer::new);   
+    
+#####Sum,Max
+    int totalCalories = menu.stream()
+                            .mapToInt(Dish::getCalories)
+                            .sum();
+    OptionalInt maxCalories = menu.stream()
+                                  .mapToInt(Dish::getCalories)
+                                  .max();
 
-
+#####Numeric ranges (IntStream and LongStream)
+    Java has two static methods available on IntStream and LongStream to help generate range of numbers:
+    range       : range is exclusive 
+                IntStream numbers = IntStream.range(1,5)      // generate numbers from 1 to 4
+                
+    rangeClosed : rangeClosed is inclusive
+                IntStream numbers = IntStream.rangeClosed(1,5)    // generate numbers from 1 to 5
+   
 
 
 
