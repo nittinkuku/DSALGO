@@ -306,6 +306,16 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
 
 ####Collecting Data with stream
 #####Reducing & Summarizing
+#####ToList,ToSet & ToCollection
+    toList : Gather all the stream’s items in a List.                                       
+             List<Dish> dishes = menuStream.collect(toList());
+                                                    
+    toSet :  Gather all the stream’s items in a Set, eliminating duplicates.                                       
+            Set<Dish> dishes = menuStream.collect(toSet());   
+                                                
+    toCollection : Gather all the stream’s items in the collection created by the provided supplier.
+            Set<Dish> dishes = menuStream.collect(toCollection(HashSet::new));
+            
 #####Counting
     Use the collector returned by the counting factory method
     
@@ -362,7 +372,7 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
     
     It takes three arguments
     1) Starting Value : This will also be the value returned in the case of empty stream
-    2) Supplier<T>    : Which provides the values for calculation
+    2) Function<T,R>  : Mapping function which provides the value for reduction
     3) Binary Operator: That aggregators two items to a single
 
     Collector with one argument can be think of as a particular case of three-argument constructor, which used the first item as a starting point
@@ -391,18 +401,24 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
     The method takes two arguments, the collector to be adapted and a transformation function and then returns another collector
     
     Map<Dish.Type, Optional<Dish>> mostCaloricByType = menu.stream()
-                .collect(groupingBy(Dish::getType, maxBy(comparingInt(Dish::getCalories))));                        
+                .collect(groupingBy(Dish::getType, maxBy(comparingInt(Dish::getCalories))));      
+                                  
     //using the maxBy collector to find the highest calorie dish but this is not very useful as it gives Optional<Dish>
     
     Map<Dish.Type, Dish> mostCaloricDishByType = menu.stream()
                                                      .collect(Collectors.groupingBy(Dish::getType, 
-                                                     Collectors.collectingAndThen(maxBy(Comparator.comparingInt(Dish::getCalories)),Optional::get)));              
+                                                     Collectors.collectingAndThen(maxBy(Comparator.comparingInt(Dish::getCalories)),Optional::get)));   
+                                                     
+    This factory method takes two arguments, the collector to be adapted and a transformation function, and returns another collector. 
+    This additional collector acts as a wrapper for the old one and maps the value it returns using the transformation function as the last step of the collect operation.                                                                
     
     More generally, the collector passes as second argument to the groupingBy factory method will be used to perform a further reduction operation on all the elements in the stream classified into the same group
     
     More examples :
                 Map<Dish.Type, Integer> totalCaloriesByType = menu.stream()
                                                                   .collect(groupingBy(Dish::getType,summingInt(Dish::getCalories)));
+                                                                  
+    mapping function:
                 
                 Map<Dish.Type, Set<CaloricLevel>> caloricLevelsByType =menu.stream()
                                         .collect(groupingBy(Dish::getType, 
@@ -411,59 +427,105 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
                                                   else if (dish.getCalories() <= 700) return CaloricLevel.NORMAL;
                                                   else return CaloricLevel.FAT; },    
                                         toSet())));
+                                        
+    //This method takes two arguments: a function transforming the elements in a stream and a further collector accumulating the objects resulting from this transformation.
+    
+    Map<Dish.Type, Set<CaloricLevel>> caloricLevelsByType =menu.stream()
+                                                               .collect(groupingBy(Dish::getType, 
+                                                               Collectors.mapping(    
+                                                               dish -> { if (dish.getCalories() <= 400) return CaloricLevel.DIET;            
+                                                                         else if (dish.getCalories() <= 700) return CaloricLevel.NORMAL;          
+                                                                         else return CaloricLevel.FAT; },    
+                                                               toCollection(HashSet::new) )));
+                                                               
+    In the previous example there is no guarantee what kind of set will be returned.                                                               
+    
+#####Partitioning
+    Partitioning is a special case of grouping: having a predicate (a function returning a boolean), called a partitioning function, as a classification function. 
+    The fact that the partitioning function returns a boolean means the resulting grouping Map will have a Boolean as a key type and therefore there can be at most two different groups—one for true and one for false. 
+    It has the advantage of keeping both lists of the stream elements, for which the application of partitioning function returns true or false.
+    
+    Map<Boolean, List<Dish>> partitionedMenu = menu.stream()
+                                                   .collect(partitioningBy(Dish::isVegetarian));
+                 List<Dish> vegetarianDishes = partitionedMenu.get(true);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#####Partitioning elements
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                                
+    It has an overloaded version to which we can pass a second collector.
+    
+    Map<Boolean, Map<Dish.Type, List<Dish>>> vegetarianDishesByType = menu.stream.collect(
+                                                                            partitioningBy(Dish::isVegetarian,
+                                                                                groupingBy(Dish::getType)));
+                                           
+    Another example :
+    
+    Map<Boolean, Dish> mostCaloricPartitionedByVegetarian = menu.stream.collect(
+                                                                    partitioningBy(Dish::isVegetarian,
+                                                                        collectingAndThen(
+                                                                            maxBy(comparingint(Dish::getCalories)),
+                                                                            Optional::get)));                                           
+                                                                            
+#####Custom Collector                                                       
+    The Collector interface consists of a set of methods that provide a blueprint for how to implement specific reduction operations (that is, collectors)
+    
+    public interface Collector<T, A, R> {    
+            Supplier<A> supplier();    
+            BiConsumer<A, T> accumulator();    
+            Function<A, R> finisher();    
+            BinaryOperator<A> combiner();    
+            Set<Characteristics> characteristics();
+    }
+    
+    T is the generic type of the items in the stream to be collected.                                       
+    A is the type of the accumulator, the object on which the partial result will be accumulated during the collection process.                                       
+    R is the type of the object (typically, but not always, the collection) resulting from the collect operation.      
+    
+    1.  The supplier method has to return a Supplier of an empty result—a parameterless function that when invoked creates an instance of an empty accumulator used during the collection process
+    
+            public Supplier<List<T>> supplier() {    
+                //return () -> new ArrayList<T>();
+                  return ArrayList::new;
+            }                                 
+    
+    2.  The accumulator method returns the function that performs the reduction operation. When traversing the nth element in the stream, this function is applied with two arguments, 
+        the accumulator being the result of the reduction (after having collected the first n–1 items of the stream) and the nth element itself.
+    
+            public BiConsumer<List<T>, T> accumulator() {
+                //return (list, item) -> list.add(item);    
+                return List::add;
+            }
+    
+    3.  The finisher method has to return a function that’s invoked at the end of the accumulation process, 
+        after having completely traversed the stream, in order to transform the accumulator object into the final result of the whole collection operation.
+    
+            public Function<List<T>, List<T>> finisher() {    
+                return Function.identity();
+            }
+    
+    4.  The combiner method return a function used by the reduction operation, defines how the accumulators resulting from the reduction of different subparts of the stream are combined when the subparts are processed in parallel.
+    
+            public BinaryOperator<List<T>> combiner() {   
+                return (list1, list2) -> {        
+                    list1.addAll(list2);        
+                    return list1; 
+                }
+            }
+    
+    5.  The last method, characteristics, returns an immutable set of Characteristics, defining the behavior of the collector—in particular providing hints about 
+        whether the stream can be reduced in parallel and which optimizations are valid when doing so.
+    
+        UNORDERED       :   The result of the reduction isn’t affected by the order in which the items in the stream are traversed and accumulated.                                       
+        CONCURRENT      :   The accumulator function can be called concurrently from multiple threads, and then this collector can perform a parallel reduction of the stream. 
+                            If the collector isn’t also flagged as UNORDERED, it can perform a parallel reduction only when it’s applied to an unordered data source.                                       
+        IDENTITY_FINISH :  This indicates the function returned by the finisher method is the identity one, and its application can be omitted. 
+                           In this case, the accumulator object is directly used as the final result of the reduction process.
+        
+        public Set<Characteristics> characteristics(){
+            return Collections.unmodifiableList(EnumSet.of(
+                        IDENTITY_FINISH,CONCURRENT));
+        }
+        
+        In the case of an IDENTITY_FINISH collection operation, Stream has an overloaded collect method accepting the three other functions—supplier, accumulator, and combiner.
+        
+            List<Dish> dishesList =  menuStream().collect(
+                                                 ArrayList::new,
+                                                 List::add,
+                                                 List::addAll);
