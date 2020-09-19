@@ -1,7 +1,7 @@
-#Streams
+# Streams
 Streams are an update to the java API that lets you manipulate collections of data in a declarative way. You can think of them as fancy iterators over a collection of data.
 
-#####Streams Definition
+##### Streams Definition
     A sequence of elements from a source that supports data processing operations.
     
     Sequence of elements : A stream is a sequence of elements from a source
@@ -17,19 +17,19 @@ Streams are an update to the java API that lets you manipulate collections of da
        
     similarly to iterators, a stream can be traversed only once. After that a stream is said to be consumed.       
         
-#####Streams vs Collection
+##### Streams vs Collection
     - Collections are about data while Streams are about computations. 
     - collections are data structures, they are mostly about storing and accessing elements with specific time/space complexities.
     - Streams are about expressing computations such as filter, sorted and map. 
     
-#####Intermediate vs Terminal
+##### Intermediate vs Terminal
     Intermediate : Stream operations that returns a strean and can be connected are called intermediate operations. 
                    These don't perform any processing until a terminal operation is invoked on the stream pipeline-they're lazy.
     Terminal     : Operations that closes a stream are called terminal operations. 
     
-####Stream Operations
+#### Stream Operations
 
-#####Filter
+##### Filter
     This operation takes as argument a predicate and returns a stream including all elements that match the predicate (elements for which predicate returns true)
 
     Operation           :   filter        
@@ -42,7 +42,7 @@ Streams are an update to the java API that lets you manipulate collections of da
                                       .filter(Dish::isVegetarian)
                                       .collect(toList());
 
-#####Distinct
+##### Distinct
     This returns a stream with unique elements (according to the implementation of the hashCode and equals methods of the objects produced by the stream).
     
     Operation   :   distinct        
@@ -55,7 +55,7 @@ Streams are an update to the java API that lets you manipulate collections of da
              .distinct()
              .forEach(System.out::println);
 
-#####Limit
+##### Limit
     This returns a stream that's no longer than a given size.
     
     Operation   :   limit        
@@ -68,7 +68,7 @@ Streams are an update to the java API that lets you manipulate collections of da
                                         .limit(3)
                                         .collect(toList());
 
-#####Skip
+##### Skip
     This a stream that discards the first n elements. If the stream has fewer elements than n, then an empty stream is returned
     
     Operation   :   skip        
@@ -81,7 +81,7 @@ Streams are an update to the java API that lets you manipulate collections of da
                                        .skip(2)
                                        .collect(toList());
 
-#####Map
+##### Map
     The method map takes a function as argument. The function is applied to each element, mapping it into a new element
     
     Operation           :   map        
@@ -94,7 +94,7 @@ Streams are an update to the java API that lets you manipulate collections of da
                                              .map(Dish::getName)                             
                                              .collect(toList());
     
-#####Flat Map   
+##### Flat Map   
     In a nutshell, the flatMap method lets you replace each value of a stream with another stream and then concatenates all the generated streams into a single stream. 
     
     Operation           :   flatMap        
@@ -109,7 +109,7 @@ Streams are an update to the java API that lets you manipulate collections of da
                                                      .distinct()
                                                      .collect(Collectors.toList());
                                                      
-#####Any Match   
+##### Any Match   
     The anyMatch method can be used to answer the question “Is there an element in the stream matching the given predicate?" 
     
     Operation           :   anyMatch        
@@ -121,7 +121,7 @@ Streams are an update to the java API that lets you manipulate collections of da
     eg.         boolean isThereAnyVegetarianDish = menu.stream()
                                                        .anyMatch(Dish::isVegetarian);
 
-#####All Match   
+##### All Match   
     The allMatch method works similarly to anyMatch but will check to see if all the elements of the stream match the given predicate.  
     
     Operation           :   allMatch        
@@ -133,7 +133,7 @@ Streams are an update to the java API that lets you manipulate collections of da
     eg.         boolean isHealthy = menu.stream()
                                         .allMatch(d -> d.getCalories() < 1000);
                                         
-#####None Match   
+##### None Match   
     The opposite of allMatch is noneMatch. It ensures that no elements in the stream match the given predicate.  
      
     Operation           :   noneMatch        
@@ -145,7 +145,7 @@ Streams are an update to the java API that lets you manipulate collections of da
     eg.         boolean isHealthy = menu.stream()                        
                                          .noneMatch(d -> d.getCalories() >= 1000);   
                                          
-#####Find Any   
+##### Find Any   
     The findAny method returns an arbitrary element of the current stream.  
      
     Operation   :   findAny        
@@ -156,7 +156,7 @@ Streams are an update to the java API that lets you manipulate collections of da
                                             .filter(Dish::isVegetarian)      
                                             .findAny(); 
 
-#####Find First   
+##### Find First   
     The findFirst method returns the first element in the stream.  
      
     Operation   :   findFirst        
@@ -168,7 +168,7 @@ Streams are an update to the java API that lets you manipulate collections of da
                                                                             .filter(x -> x % 3 == 0)             
                                                                             .findFirst();
 
-#####Reduce   
+##### Reduce   
     The reduce method is used to reduce the stream to a single element by combinging all elements. 
      
     Operation           :   reduce        
@@ -190,7 +190,7 @@ Streams are an update to the java API that lets you manipulate collections of da
                                                .reduce((a, b) -> (a + b));
      
 
-#####Max and Min
+##### Max and Min
     Max and Min value of a stream can be deduced using reduce method.  
      
     Operation           :   reduce        
@@ -205,7 +205,7 @@ Streams are an update to the java API that lets you manipulate collections of da
                 Optional<Integer> min = numbers.stream()
                                                 .reduce(Integer::min);
                                                 
-#####Count
+##### Count
     The count method gives the no of elements in the Stream.  
      
     Operation           :   count        
@@ -215,7 +215,7 @@ Streams are an update to the java API that lets you manipulate collections of da
     eg.        long noOfElements = numbers.stream()
                                            .count;      
                                                                                                                                   
-#####Sorted
+##### Sorted
     The sorted method ...  
      
     Operation           :   sorted        
@@ -226,7 +226,7 @@ Streams are an update to the java API that lets you manipulate collections of da
      
     eg.        
 
-#####ForEach
+##### ForEach
     The forEach method ...  
      
     Operation           :   forEach        
@@ -237,7 +237,7 @@ Streams are an update to the java API that lets you manipulate collections of da
      
     eg.        
                                                             
-#####Collect
+##### Collect
      The collect method ....
      
     Operation           :   collect        
@@ -247,20 +247,20 @@ Streams are an update to the java API that lets you manipulate collections of da
      
     eg.                                                      
 
-####Primitive Stream
+#### Primitive Stream
 There are primitive streams to avoid autoboxing and to provide some specialized functions.
 
-#####Converting General Stream to Primitive Stream
+##### Converting General Stream to Primitive Stream
     int calories = menu.stream()
                        .mapToInt(Dish::getCalories) // converts to IntStream
                        .sum();
                        
-#####Converting Primitive Stream to General Stream
+##### Converting Primitive Stream to General Stream
     IntStream intStream = menu.stream().mapToInt(Dish::getCalories):
     Stream<Integer> stream1 = intStream.boxed();
     Stream<Integer> stream2 = intStream.mapToObj(Integer::new);   
     
-#####Sum,Max
+##### Sum,Max
     int totalCalories = menu.stream()
                             .mapToInt(Dish::getCalories)
                             .sum();
@@ -268,7 +268,7 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
                                   .mapToInt(Dish::getCalories)
                                   .max();
 
-#####Numeric ranges (IntStream and LongStream)
+##### Numeric ranges (IntStream and LongStream)
     Java has two static methods available on IntStream and LongStream to help generate range of numbers:
     range       : range is exclusive 
                 IntStream numbers = IntStream.range(1,5)      // generate numbers from 1 to 4
@@ -276,7 +276,7 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
     rangeClosed : rangeClosed is inclusive
                 IntStream numbers = IntStream.rangeClosed(1,5)    // generate numbers from 1 to 5
    
-####Building Streams
+#### Building Streams
     Empty Stream :
                 Stream<String> emptyStream = Stream.empty();
     From explicit values : 
@@ -288,7 +288,7 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
             try(Stream<String> lines = Files.lines(Paths.get("data.txt"), Charset.defaultCharset()))
             Files.lines returns a Stream of Lines as Strings from a given file. 
 
-####Infinite Streams
+#### Infinite Streams
     iterate and generate methods allows you to create infinite stream: a stream which does not have a fixed size.
     
     Iterate :   The iterate method takes an initial value and a lambda of type Unary Operator<T> to apply  successively on each new value.
@@ -304,9 +304,9 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
                       .limit(5)
                       .forEach(System.out::println);
 
-####Collecting Data with stream
-#####Reducing & Summarizing
-#####ToList,ToSet & ToCollection
+#### Collecting Data with stream
+##### Reducing & Summarizing
+##### ToList,ToSet & ToCollection
     toList : Gather all the stream’s items in a List.                                       
              List<Dish> dishes = menuStream.collect(toList());
                                                     
@@ -316,7 +316,7 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
     toCollection : Gather all the stream’s items in the collection created by the provided supplier.
             Set<Dish> dishes = menuStream.collect(toCollection(HashSet::new));
             
-#####Counting
+##### Counting
     Use the collector returned by the counting factory method
     
     long howManyDishes = menu.stream()
@@ -324,7 +324,7 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
     Easy Way :
                 long howManyDishes = menu.stream().count();   
                 
-#####Max and Min
+##### Max and Min
     We can use two collectors Collectors.maxBy() and Collectors.minBy() to calculate the max and min value in a stream
     
     Optional<Dish> mostCalorieDish =  menu.stream()
@@ -332,7 +332,7 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
     Optional<Dish> leastCalorieDish =  menu.stream()
                                               .collect(Collectors.minBy(Comparator.comparingInt(Dish::getCalories)));                       
 
-#####Sum,Avg and Statistics
+##### Sum,Avg and Statistics
     Collectors class provides a specific factory method for summing. Collectors.summingInt that accepts a function 
     that converts an object to int that has to be summed. 
     
@@ -352,7 +352,7 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
     
     There are corresponding summarizingLong and summarizingDouble methods with associated types for LongSummaryStatistics and DoubleSummaryStatistics
 
-#####Joining Strings
+##### Joining Strings
     The collector returned by the joining factory method concatenates into a single string all strings resulting from invoking the toString method on each object.
 
     String shortMenu = menu.stream()
@@ -363,7 +363,7 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
                                .map(Dish::getName)
                                .collect(Collectors.joining(","));
                             
-#####Reduction
+##### Reduction
     int totalCalories = menu.stream()
                             .collect(Collectors.reducing(0,Dish::getCalories,(i,j)->i+j));
     Simplified
@@ -381,15 +381,15 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
     Option<Dish> mostCalorieDish = menu.stream()
                                        .collect(Collectors.reducing((d1,d2)->d1.getCalories()>d2.getCalories() ? d1:d2));
     
-#####Grouping elements
-#####Simple Grouping :   
+##### Grouping elements
+##### Simple Grouping :   
     The result of this grouping operation is a Map having a key the value returned by the classification function and 
     as corresponding map value a list of all the items in the stream having that classified value.
     
     Map<Dish.Type,List<Dish>> dishesByType = menu.stream()
                                                  .collect(Collectors.groupingBy(Dish::getType));
     
-#####Multilevel Grouping : 
+##### Multilevel Grouping : 
     Collectors.groupingBy factory method has a two-argument version which accepts a second argument of type collector besides the usual classification function
         
     Map<Dish.Type, Map<String, List<Dish>> dishesByCaloricLevel = menu.stream()
@@ -397,7 +397,7 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
     
     one-argument groupingBy(f) where f is the classification function, is in reality just shorthand for groupingBy(f,toList())     
     
-#####CollectingAndThen :
+##### CollectingAndThen :
     The method takes two arguments, the collector to be adapted and a transformation function and then returns another collector
     
     Map<Dish.Type, Optional<Dish>> mostCaloricByType = menu.stream()
@@ -440,7 +440,7 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
                                                                
     In the previous example there is no guarantee what kind of set will be returned.                                                               
     
-#####Partitioning
+##### Partitioning
     Partitioning is a special case of grouping: having a predicate (a function returning a boolean), called a partitioning function, as a classification function. 
     The fact that the partitioning function returns a boolean means the resulting grouping Map will have a Boolean as a key type and therefore there can be at most two different groups—one for true and one for false. 
     It has the advantage of keeping both lists of the stream elements, for which the application of partitioning function returns true or false.
@@ -463,7 +463,7 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
                                                                             maxBy(comparingint(Dish::getCalories)),
                                                                             Optional::get)));                                           
                                                                             
-#####Custom Collector                                                       
+##### Custom Collector                                                       
     The Collector interface consists of a set of methods that provide a blueprint for how to implement specific reduction operations (that is, collectors)
     
     public interface Collector<T, A, R> {    
@@ -529,3 +529,63 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
                                                  ArrayList::new,
                                                  List::add,
                                                  List::addAll);
+                                                 
+### Parallel Streams    
+         Making a stream parallel is as simple as calling parallel() on a stream.
+        
+        e.g.  Stream.iterator(1,i->i+1)
+                    .limit(n)
+                    .parallel()
+                    .reduce(0,Long::sum);    
+            
+    Calling the method parallel on a sequential stream doesn’t imply any concrete transformation on the stream itself. 
+    Internally, a boolean flag is set to signal that you want to run in parallel all the operations that follow the invocation to parallel. 
+    Similarly, you can turn a parallel stream into a sequential one by just invoking the method sequential on it.                                             
+
+    the last call to parallel or sequential wins and affects the pipeline globally
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                 

@@ -1,4 +1,4 @@
-#Lambda
+# Lambda
 A lambda expression can be understood as a concise representation of an anonymous function that can be passed around. 
 It does not have a name, but it has a list of parameters, a body, a return type, and also possibly a list of exceptions that can be thrown.
                                                                                    
@@ -8,7 +8,7 @@ It does not have a name, but it has a list of parameters, a body, a return type,
     Passed Around:  A lambda expression can be passed as argument to a method or stored in a variable.
     Concise      :  You don’t need to write a lot of boilerplate like you do for anonymous classes.
 
-#####Lambda's Syntax:
+##### Lambda's Syntax:
 
     Syntax                :  (args) -> (body)
     A list of parameters  :  list of parameters e.g 
@@ -22,11 +22,11 @@ It does not have a name, but it has a list of parameters, a body, a return type,
                           :  (String s) -> Integer.parseInt(s) 
                           :  (s) -> {return Integer.parseInt(s);}
     
-#####Functional Interface:
+##### Functional Interface:
 A Functional interface is an interface which has only one abstract method. It can have one or more default methods as well but only one abstract method should be there. They are annotated
 with @FunctionalInterface.
 
-#####Where to Use Lambds:
+##### Where to Use Lambds:
     a) A lambda can be used in the context of a functional interface. 
     b) Lambda expressions let you provide the implementation of the abstract method of a functional interface directly inline and 
        treat the whole expression as an instance of a functional interface (more technically speaking, an instance of a concrete implementation of the functional interface). 
@@ -34,7 +34,7 @@ with @FunctionalInterface.
     d) A lambda expression can be assigned to a variable or passed to a method expecting a functional interface as argument, provided the lambda expression has the same signature 
        as the abstract method of the functional interface. 
          
-#####Special void-compatibility rule: 
+##### Special void-compatibility rule: 
     If a lambda has a statement expression as its body, it’s compatible with a function descriptor that returns void (provided the parameter list is compatible too). 
       For example, both of the following lines are legal even though the method                               
         a) Predicate has a boolean return
@@ -45,79 +45,79 @@ with @FunctionalInterface.
 
 
                
-####Functional Interfaces in Java
+#### Functional Interfaces in Java
 
-#####Predicate
+##### Predicate
     Method Name      :
     Signature        :
     Input Parameters :
     Return Types     :
     Variants         :
 
-#####Consumer
+##### Consumer
     Method Name      :
     Signature        :
     Input Parameters :
     Return Types     :
     Variants         :
     
-#####Supplier
+##### Supplier
     Method Name      :
     Signature        :
     Input Parameters :
     Return Types     :
     Variants         :        
 
-#####Function
+##### Function
     Method Name      :
     Signature        :
     Input Parameters :
     Return Types     :
     Variants         :
     
-#####Unary Operator
+##### Unary Operator
     Method Name      :
     Signature        :
     Input Parameters :
     Return Types     :
     Variants         :
     
-#####Binary Operator
+##### Binary Operator
     Method Name      :
     Signature        :
     Input Parameters :
     Return Types     :
     Variants         :
     
-#####BiPredicate
+##### BiPredicate
     Method Name      :
     Signature        :
     Input Parameters :
     Return Types     :
     Variants         :
     
-#####BiConsumer
+##### BiConsumer
     Method Name      :
     Signature        :
     Input Parameters :
     Return Types     :
     Variants         :
     
-#####BiFunction
+##### BiFunction
     Method Name      :
     Signature        :
     Input Parameters :
     Return Types     :
     Variants         :
 
-#####Lambda and Exception:
+##### Lambda and Exception:
     None of the predefined functional interfaces in Java allow for a checked exception to be thrown. 
     You have two options if you need a lambda expression to throw an exception 
      a) define your own functional interface that declares the checked exception, 
                         or 
      b) wrap the lambda with a try/catch block.   
 
-#####Variable Capture:
+##### Variable Capture:
     a) Lambdas are allowed to capture (that is, to reference in their bodies) instance variables and static variables without restrictions. 
     b) But local variables have to be explicitly declared final or are effectively final. 
        In other words, lambda expressions can capture local variables that are assigned to them only once and they can't change the value of local variables inside their body.
@@ -125,7 +125,7 @@ with @FunctionalInterface.
         Reason for not allowing this is if a lambda could access the local variable directly and the lambda were used in a thread, then the thread using the lambda could try to access the variable after the thread that allocated the variable had deallocated it. 
         Hence, Java implements access to a free local variable as access to a copy of it rather than access to the original variable.
 
-#####Method Reference 
+##### Method Reference 
     a) ClassName::staticMethod
        (args) -> ClassName.staticMethod(args) 
        args will go as parameters to the staticMethod
@@ -138,7 +138,7 @@ with @FunctionalInterface.
        (arg0,rest) -> arg0.instanceMethod(res)
        arg0 will be used for calling the instance method while rest of the args will go as parameters to it
    
-#####Constructor Reference 
+##### Constructor Reference 
     ClassName::new
     All the parameters will go as parameters to the constructor of the class
     e.g.
@@ -156,7 +156,7 @@ with @FunctionalInterface.
        Function<Integer,Apple>  f1 = Apple::new        //lambda expression
                           Apple a1 = f1.apply(110);
 
-#####Using Default Methods:
+##### Using Default Methods:
     We can use default methods provided in the functional interfaces to extend their functionalities
     e.g.
     1. Comparator:
