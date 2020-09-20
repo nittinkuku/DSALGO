@@ -633,28 +633,35 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
             int length = end - start;   //The size of the portion of the array summed by this task
             if(length<=THRESHOLD){
                 retun computeSequentially();  //If the size is less than or equal to the Threshold, compute the result sequentially.
+                long sum = 0;
+                for(int i=start; i<end; i++){    //Simple algorithm calculating the result of a subtask when its no longer divisible.
+                    sum +=numbers[i];
+                }
+                return sum;
             }
             
             ForkJoinSumCalculator leftTask = new ForkJoinSumCalculator(numbers, start, start + length/2);   // creates a subtask to sum the first half of the array
             leftTask.fork();        //Asynchronously execute the newly created subtask using another thread of the ForkJoinPool
             
-            ForJoinSumCalculator rightTask = new ForkJoinSumCalculator(numbers, start, length/2, end);     // creates a subtask to sum the second half of the array   
+            ForJoinSumCalculator rightTask = new ForkJoinSumCalculator(numbers, start, length/2, end);     // creates a subtask to sum the second half of the array 
+            //rightTask.fork()  we are not forking the right task as we can use the same thread instead of unncessary creating another task on the fork join pool.
+              
             Long rightResult = rightTask.compute();      //Execute this second subtask synchronously, potentially allowing further recursive splits.             
+            
             Long leftResult = leftTask.join();           //read the result of the first subtask or wait for it if isn't ready
+            
             return leftResult + rightResult;             //The result of this task is the combination of the results of the two subtasks.
-        }
-        
-        private long computeSequentially(){         //Simple algorithm calculating the result of a subtask when its no longer divisible.
-            long sum = 0;
-            for(int i=start; i<end; i++){
-                sum +=numbers[i];
-            }
-            return sum;
         }
     }
     
-    you’re using its default no-argument constructor, meaning that you want to allow the pool to use all the processors available to the JVM. More precisely,
-    this constructor will use the value returned by Runtime.availableProcessors to determine the number of threads used by the pool. 
+    public static long forkJoinSum(long n) {    
+            long[] numbers = LongStream.rangeClosed(1, n).toArray();    
+            ForkJoinTask<Long> task = new ForkJoinSumCalculator(numbers);    
+            return new ForkJoinPool().invoke(task);
+    }
+    
+    you’re using its default no-argument constructor, meaning that you want to allow the pool to use all the processors available to the JVM. 
+    More precisely, this constructor will use the value returned by Runtime.availableProcessors to determine the number of threads used by the pool. 
     Note that the availableProcessors method, despite its name, in reality returns the number of available cores, including any virtual ones due to hyperthreading.
     
     Best Practices :
