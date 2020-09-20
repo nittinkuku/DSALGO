@@ -412,7 +412,8 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
     This factory method takes two arguments, the collector to be adapted and a transformation function, and returns another collector. 
     This additional collector acts as a wrapper for the old one and maps the value it returns using the transformation function as the last step of the collect operation.                                                                
     
-    More generally, the collector passes as second argument to the groupingBy factory method will be used to perform a further reduction operation on all the elements in the stream classified into the same group
+    More generally, the collector passes as second argument to the groupingBy factory method will be used 
+    to perform a further reduction operation on all the elements in the stream classified into the same group
     
     More examples :
                 Map<Dish.Type, Integer> totalCaloriesByType = menu.stream()
@@ -442,7 +443,8 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
     
 ##### Partitioning
     Partitioning is a special case of grouping: having a predicate (a function returning a boolean), called a partitioning function, as a classification function. 
-    The fact that the partitioning function returns a boolean means the resulting grouping Map will have a Boolean as a key type and therefore there can be at most two different groups—one for true and one for false. 
+    The fact that the partitioning function returns a boolean means the resulting grouping Map will have a Boolean as a key type 
+    and therefore there can be at most two different groups—one for true and one for false. 
     It has the advantage of keeping both lists of the stream elements, for which the application of partitioning function returns true or false.
     
     Map<Boolean, List<Dish>> partitionedMenu = menu.stream()
@@ -500,7 +502,8 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
                 return Function.identity();
             }
     
-    4.  The combiner method return a function used by the reduction operation, defines how the accumulators resulting from the reduction of different subparts of the stream are combined when the subparts are processed in parallel.
+    4.  The combiner method return a function used by the reduction operation, defines how the accumulators resulting from the reduction of different subparts of the stream are combined 
+        when the subparts are processed in parallel.
     
             public BinaryOperator<List<T>> combiner() {   
                 return (list1, list2) -> {        
@@ -531,7 +534,7 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
                                                  List::addAll);
                                                  
 ### Parallel Streams    
-         Making a stream parallel is as simple as calling parallel() on a stream.
+    Making a stream parallel is as simple as calling parallel() on a stream.
         
         e.g.  Stream.iterator(1,i->i+1)
                     .limit(n)
@@ -544,23 +547,162 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
 
     the last call to parallel or sequential wins and affects the pipeline globally
 
+    Parallel streams internally use the default ForkJoinPool, which by default has as many threads as you have processors as returned by Runtime.getRuntime().availableProcessors().
+            System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "12");   // to change the default threads for fork join pool
+    This is a global setting, so it will affect all the parallel streams in your code
+    
+    Always keep a mental mode that some stream operations are more parallelizable than others.
+    
+    e.g.
+    
+    Parallel : 168 ms
+                public static long parallelIterateSum(){
+                                    return Stream.iterate(1L,(n)->n+1)
+                                                 .limit(1000000)
+                                                 .parallrl()
+                                                 .reduce(0L,Long::sum);
+    }
+                    
+    Sequential : 17 ms
+                public static long rangedSum(long n) {    
+                                    return LongStream.rangeClosed(1, n)                     
+                                                    .reduce(0L, Long::sum);
+                }
+    Here the sequential version will most probably run faster for below reaons:
+                
+    1) iterate generates boxed objects, which have to be unboxed to numbers before they can be added. 
+    2) Iterate is difficult to divide into independent chunks to execute in parallel. It is hard to split into chunks that can be executed independently 
+       because the input of one function application always depends on the result of the previous application.
+    
+    Parallel : 1 ms
+                public static long parallelRangedSum(long n) {    
+                                   return LongStream.rangeClosed(1, n)                    
+                                                    .parallel()                     
+                                                    .reduce(0L, Long::sum);
+                }
+                
+    operations such as limit and findFirst that rely on the order of the elements are expensive in a parallel stream. 
+    For example, findAny will perform better than findFirst because it isn’t constrained to operate in the encounter order. 
+    You can always turn an ordered stream into an unordered stream by invoking the method unordered on it. 
+    So, for instance, if you need N elements of your stream and you’re not necessarily interested in the first N ones, 
+    calling limit on an unordered parallel stream may execute more efficiently than on a stream with an encounter order (for example, when the source is a List).
 
+####Fork-Join Framework
 
+    The fork/join framework was designed to recursively split a parallelizable task into smaller tasks and then combine the results of each subtask to produce the overall result. 
+    It’s an implementation of the ExecutorService interface, which distributes those subtasks to worker threads in a thread pool, called ForkJoinPool.
+    
+    To submit tasks to this pool, you have to create a subclass of RecursiveTask<R>, where R is the type of the result produced by the parallelized task (and each of its subtasks) or 
+    of RecursiveAction if the task returns no result (it could be updating other nonlocal structures, though)
+    
+    if (task is small enough or no longer divisible) {    
+        compute task sequentially
+    } 
+    else {    
+        split task in two subtasks    
+        call this method recursively possibly further splitting each subtask    
+        wait for the completion of all subtasks    
+        combine the results of each subtask
+    }
 
+    It doesn’t make sense to use more than one ForkJoinPool. 
+    For this reason, what you typically should do is instantiate it only once and keep this instance in a static field, making it a singleton, 
+    so it could be conveniently reused by any part of your software.
 
+    e.g.
+    
+    public class ForkJoinSumCalculator extends RecursiveTask<Long> {    //extends RecursiveTask to create a task usable with the fork/join framework
+        private final long[] numbers;    //the array to be summed
+        private final int start;         // the intial postions of the portion of array processes by this subtask
+        private final int end;
+        
+        public static final long THRESHOLD = 10_000;  //the size of the array under which this task is no longer split into subtasks
+        
+        public ForkJoinSumCalculator(long[] numbers){   //public constructor used to create the main task
+            this(numbers, 0, numbers.length);
+        }
+        
+        private ForkJoinSumCalculator(long[] numbers, int start, int end){  //private constructor used to recursively create subtasks of the main task
+            this.numbers = numbers;
+            this.start = start;
+            this.end = end;
+        }
+        
+        @Override               //Override the abstract method of RecursiveTask
+        protected Long compute(){
+            int length = end - start;   //The size of the portion of the array summed by this task
+            if(length<=THRESHOLD){
+                retun computeSequentially();  //If the size is less than or equal to the Threshold, compute the result sequentially.
+            }
+            
+            ForkJoinSumCalculator leftTask = new ForkJoinSumCalculator(numbers, start, start + length/2);   // creates a subtask to sum the first half of the array
+            leftTask.fork();        //Asynchronously execute the newly created subtask using another thread of the ForkJoinPool
+            
+            ForJoinSumCalculator rightTask = new ForkJoinSumCalculator(numbers, start, length/2, end);     // creates a subtask to sum the second half of the array   
+            Long rightResult = rightTask.compute();      //Execute this second subtask synchronously, potentially allowing further recursive splits.             
+            Long leftResult = leftTask.join();           //read the result of the first subtask or wait for it if isn't ready
+            return leftResult + rightResult;             //The result of this task is the combination of the results of the two subtasks.
+        }
+        
+        private long computeSequentially(){         //Simple algorithm calculating the result of a subtask when its no longer divisible.
+            long sum = 0;
+            for(int i=start; i<end; i++){
+                sum +=numbers[i];
+            }
+            return sum;
+        }
+    }
+    
+    you’re using its default no-argument constructor, meaning that you want to allow the pool to use all the processors available to the JVM. More precisely,
+    this constructor will use the value returned by Runtime.availableProcessors to determine the number of threads used by the pool. 
+    Note that the availableProcessors method, despite its name, in reality returns the number of available cores, including any virtual ones due to hyperthreading.
+    
+    Best Practices :
+    
+    1. Invoking the join method on a task blocks the caller until the result produced by that task is ready. 
+       For this reason, it’s necessary to call it after the computation of both subtasks has been started.
+    2. The invoke method of a ForkJoinPool shouldn’t be used from within a RecursiveTask. Instead, you should always call the methods compute or fork directly; 
+       only sequential code should use invoke to begin parallel computation.
+    3. Calling the fork method on a subtask is the way to schedule it on the ForkJoinPool. 
+       It might seem natural to invoke it on both the left and right subtasks, but this is less efficient than just directly calling compute on one of them. 
+       Doing this allows you to reuse the same thread for one of the two subtasks and avoid the overhead caused by the unnecessary allocation of a further task on the pool.
 
+    Work Stealing:
+    Tasks are more or less evenly divided on all the threads in the ForkJoinPool. 
+    Each of these threads holds a doubly linked queue of the tasks assigned to it, and as soon as it completes a task it pulls another one from the head of the queue and starts executing it. 
+    one thread might complete all the tasks assigned to it much faster than the others, which means its queue will become empty while the other threads are still pretty busy. 
+    In this case, instead of becoming idle, the thread randomly chooses a queue of a different thread and “steals” a task, taking it from the tail of the queue.
+    
+    That’s why having many smaller tasks, instead of only a few bigger ones, can help in better balancing the workload among the worker threads.
 
+####Spliterator
+    Like Iterators, Spliterators are used to traverse the elements of a source, but they’re also designed to do this in parallel
+    Java already provides a default Spliterator implementation for all the data structures included in its Collections Framework. 
+    Collections now implements the interface Spliterator, which provides a method spliterator
+    
+    public interface Spliterator<T> {    
+            boolean tryAdvance(Consumer<? super T> action);    
+            Spliterator<T> trySplit();    
+            long estimateSize();    
+            int characteristics();
+    }
+    
 
-
-
-
-
-
-
-
-
-
-
+     1. tryAdvance method behaves in a way similar to a normal Iterator in the sense that it’s used to sequentially consume the elements of the Spliterator one by one, 
+        returning true if there are still other elements to be traversed. 
+     2. The trySplit method is more specific to the Spliterator interface because it’s used to partition off some of its elements to a second Spliterator 
+        (the one returned by the method), allowing the two to be processed in parallel. 
+     3. A Spliterator may also provide an estimation of the number of the elements remaining to be traversed via its estimateSize method.
+     4. The last abstract method is characteristics, which returns an int encoding the set of characteristics of the Spliterator itself. 
+        The Spliterator clients can use these characteristics to better control and optimize its usage
+        a) ORDERED     Elements have a defined order (for example, a List), so the Spliterator enforces this order when traversing and partitioning them.
+        b) DISTINCT    For each pair of traversed elements x and y, x.equals(y) returns false.                                       
+        c) SORTED      The traversed elements follow a predefined sort order.                                       
+        d) SIZED       This Spliterator has been created from a source with a known size (for example, a Set), so the value returned by estimatedSize() is precise.
+        e) NONNULL     It’s guaranteed that the traversed elements won’t be null.                                       
+        f) IMMUTABLE   The source of this Spliterator can’t be modified. This implies that no elements can be added, removed, or modified during their traversal.                                                      
+        g) CONCURRENT  The source of this Spliterator may be safely concurrently modified by other threads without any synchronization.                                       
+        h) SUBSIZED    Both this Spliterator and all further Spliterators resulting from its split are SIZED.
 
 
 
