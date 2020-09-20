@@ -216,7 +216,7 @@ Streams are an update to the java API that lets you manipulate collections of da
                                            .count;      
                                                                                                                                   
 ##### Sorted
-    The sorted method ...  
+    The sorted method sorts the list based on the comparator given.  
      
     Operation           :   sorted        
     Type                :   Intermediate (stateful-unbounded)              
@@ -224,10 +224,12 @@ Streams are an update to the java API that lets you manipulate collections of da
     args                :   Comparator<T>  
     Function descriptor :   (T, T) -> int         
      
-    eg.        
+    eg.          List<Dish> dishSortedByCalories = menu.stream()
+                                                       .sorted(Comparator.comparingInt(Dish::getCalories))
+                                                       .collect(toList());
 
 ##### ForEach
-    The forEach method ...  
+    The forEach performs an operation on each element of the strea.
      
     Operation           :   forEach        
     Type                :   Terminal              
@@ -235,17 +237,17 @@ Streams are an update to the java API that lets you manipulate collections of da
     args                :   Consumer<T>  
     Function descriptor :   T -> void         
      
-    eg.        
-                                                            
-##### Collect
-     The collect method ....
-     
-    Operation           :   collect        
-    Type                :   Terminal              
-    Return Type         :   R            
-    args                :   Collector<T, A, R>            
-     
-    eg.                                                      
+    eg.          List<Dish> dishSortedByCalories = menu.stream()
+                                                       .forEach(System.out::println);  
+                                                       
+##### Peek
+      Its purpose is to execute an action on each element of a stream as it’s consumed, but it does not consume the whole stream as forEach does.
+      
+      e.g.      List<Integers> result = numbers.stream()
+                                               .peek(System.out::println)
+                                               .map(x->x+17)
+                                               .peek(System.out::println)
+                                               .collect(toList();                              
 
 #### Primitive Stream
 There are primitive streams to avoid autoboxing and to provide some specialized functions.
@@ -672,7 +674,7 @@ There are primitive streams to avoid autoboxing and to provide some specialized 
        only sequential code should use invoke to begin parallel computation.
     3. Calling the fork method on a subtask is the way to schedule it on the ForkJoinPool. 
        It might seem natural to invoke it on both the left and right subtasks, but this is less efficient than just directly calling compute on one of them. 
-       Doing this allows you to reuse the same thread for one of the two subtasks and avoid the overhead caused by the unnecessary allocation of a further task on the pool.
+       Doing this allows you to reuse the same thread for one of the two subtasks and avoid the overhead caused by the unnecessary allocation of a further task on the pool. 
 
     Work Stealing:
     Tasks are more or less evenly divided on all the threads in the ForkJoinPool. 

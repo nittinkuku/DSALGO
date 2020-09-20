@@ -5,6 +5,8 @@
 #####Heading 5
 ######Heading 6
 
+Adding space between words : word1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; word2
+
 *This text will be italic*
 
 _This text will be italic_

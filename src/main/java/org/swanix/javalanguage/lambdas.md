@@ -188,7 +188,32 @@ with @FunctionalInterface.
         You can also use the method "compose" similarly to first apply the function gives as argument to compose and the apply the function to the result.
                 Function<Integer,Integer> f = x-> x+1;
                 Function<Integer,Integer> g = x-> x*2;
-                Function<Integer,Integer> h = f.andThen(g);
+                Function<Integer,Integer> h = f.compose(g);
                 int result = h.apply(1);      // returns 3
         
+#### Anonymous Class vs Lambda
+    The meanings of this and super are different for anonymous classes and lambda expressions. 
+    Inside an anonymous class, this refers to the anonymous class itself, but inside a lambda it refers to the enclosing class. 
+    Second, anonymous classes are allowed to shadow variables from the enclosing class. Lambda expressions can’t (they’ll cause a compile error), as shown in the following code:
             
+    int a=10;
+    Runnable r1=()->{
+        int a=2;                    //compile error in lambda
+        System.out.println(a);
+    }
+    
+    Runnable r2 = new Runnable(){
+        public void run(){
+            int a=2;                //fine in anonymous class
+            System.out.println(a);
+        }
+    }
+    
+#### Default Methods
+    Java now allows you to have static as well as default methods inside interfaces. A default method has new default modifier before the return type.
+    
+    There are three rules to follow when a class inherits a method with the same signature from multiple places (such as another class or interface):
+    1.  Classes always win. A method declaration in the class or a superclass takes priority over any default method declaration.
+    2.  Otherwise, sub-interfaces win: the method with the same signature in the most specific default-providing interface is selected. (If B extends A, B is more specific than A).
+    3.  Finally, if the choice is still ambiguous, the class inheriting from multiple interfaces has to explicitly select which default method implementation to use by overriding it 
+        and calling the desired method explicitly.
