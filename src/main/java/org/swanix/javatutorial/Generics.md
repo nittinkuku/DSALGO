@@ -211,3 +211,188 @@
         
     But, as before, nested wildcards are permitted
         class NestedList extends ArrayList<List<?>> {...} // ok     
+
+##### Comparison and Bounds
+    interface Comparable<T> {  
+        public int compareTo(T o);
+    }
+    
+    Find max of a collection :
+    
+    public static <T extends Comparable<T>> T max(Collection<T> coll) {    
+        T candidate = coll.iterator().next();    
+        for (T elt : coll) {        
+            if (candidate.compareTo(elt) < 0) candidate = elt;    
+        }    return candidate;
+    }
+    
+    As with wildcards, bounds for type variables are always indicated by the keyword extends, even when the bound is an interface rather than a class
+    
+    Unlike wildcards, type variables must always be bounded using extends, never super.
+    
+##### Multiple Bounds
+    public static <S extends Readable & Closeable, T extends Appendable & Closeable> 
+    
+    When multiple bounds appear, the first bound is used for erasure.   
+    
+    public static <T extends Object & Comparable<? super T>>  T max(Collection<? extends T> coll)
+    
+    Without the T extends Object, the erased type signature for max would have Comparable as the return type, whereas in legacy libraries the return type is Object
+
+##### Bridges
+    interface Comparable {  
+        public int compareTo(Object o);
+    }class 
+    
+    Integer implements Comparable {  
+        private final int value;  
+        public Integer(int value) { 
+            this.value = value; 
+        }  
+        
+        public int compareTo(Integer i) {    
+            return (value < i.value) ? -1 : (value == i.value) ? 0 : 1;  
+        }  
+        
+        public int compareTo(Object o) {    
+            return compareTo((Integer)o);  
+        }
+    }
+    
+    Above shows the Comparable interface and a simplified version of the Integer class in Java before generics. 
+    In the nongeneric interface, the compareTo method takes an argument of type Object. In the nongeneric class, there are two compareTo methods. 
+    The first is the naïve method you might expect, to compare an integer with another integer.    
+    The second compares an integer with an arbitrary object: it casts the object to an integer and calls the first method. 
+    The second method is necessary in order to override the compareTo method in the Comparable interface, because overriding occurs only when the method signatures are identical. 
+    
+    This second method is called a bridge.
+    
+##### Declarations
+    In a generic class, type parameters appear in the header that declares the class, but not in the constructor:
+    
+    class Pair<T, U> {  
+        private final T first;  
+        private final U second;  
+        
+        public Pair(T first, U second) { 
+            this.first=first; this.second=second; 
+        }  
+        public T getFirst() { 
+            return first; 
+        }  
+        public U getSecond() { 
+            return second; 
+        }
+    }
+    
+    actual type parameters are passed to the constructor whenever it is invoked:
+        Pair<String, Integer> pair = new Pair<String, Integer>("one",2);
+        
+    Look Out for This! 
+    A common mistake is to forget the type parameters when invoking the constructor:
+        Pair<String, Integer> pair = new Pair("one",2);
+    This mistake produces a warning, but not an error. It is taken to be legal, because Pair is treated as a raw type.
+
+    Static Members : 
+    
+    Because generics are compiled by erasure, at run time the classes List<Integer>, List<String>, and List<List<String>> are all    implemented by a single class, namely List
+    
+    static members of a generic class are shared across all instantiations of that class, including instantiations at different types.    
+    Static members of a class cannot refer to the type parameter of a generic class, and when accessing a static member the class name should not be parameterized.
+
+    class Cell<T> {  
+        private final int id;  
+        private final T value;  
+        private static int count = 0;
+        private static int nextId() { 
+            return count++; 
+        }
+        public static int getCount() { 
+            return count; 
+        }
+    }
+    
+    Because static members are independent of any type parameters, we are not permitted to follow the class name with type parameters when accessing a static member:
+    Cell.getCount();            // ok
+    Cell<Integer>.getCount();  // compile-time error
+    Cell<?>.getCount();        // compile-time error
+    
+    The count is static, so it is a property of the class as a whole, not any particular instance. For the same reason, you may not refer to a type parameter anywhere within a static member.  
+
+##### Nested classes
+    Java permits nesting one class inside another. If the outer class has type parameters and the inner class is not static, then type parameters of the outer class are visible within the inner class.
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
