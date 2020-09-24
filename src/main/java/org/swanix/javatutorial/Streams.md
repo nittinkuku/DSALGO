@@ -190,7 +190,7 @@ Streams are an update to the java API that lets you manipulate collections of da
                                                .reduce((a, b) -> (a + b));
      
 
-##### Max and Min
+##### Max and Min  (Using Reduce)
     Max and Min value of a stream can be deduced using reduce method.  
      
     Operation           :   reduce        
@@ -213,7 +213,7 @@ Streams are an update to the java API that lets you manipulate collections of da
     Return Type         :   long           
      
     eg.        long noOfElements = numbers.stream()
-                                           .count;      
+                                           .count();      
                                                                                                                                   
 ##### Sorted
     The sorted method sorts the list based on the comparator given.  
