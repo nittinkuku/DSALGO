@@ -48,68 +48,32 @@ with @FunctionalInterface.
 #### Functional Interfaces in Java
 
 ##### Predicate
-    Method Name      :
-    Signature        :
-    Input Parameters :
-    Return Types     :
-    Variants         :
+    Signature        : boolean test(T t);
 
 ##### Consumer
-    Method Name      :
-    Signature        :
-    Input Parameters :
-    Return Types     :
-    Variants         :
+    Signature        :  void accept(T t);
     
 ##### Supplier
-    Method Name      :
-    Signature        :
-    Input Parameters :
-    Return Types     :
-    Variants         :        
+    Signature        :  T get();   
 
 ##### Function
-    Method Name      :
-    Signature        :
-    Input Parameters :
-    Return Types     :
-    Variants         :
+    Signature        :   R apply(T t);
     
 ##### Unary Operator
-    Method Name      :
-    Signature        :
-    Input Parameters :
-    Return Types     :
-    Variants         :
+    Signature        :  T apply(T t);
     
 ##### Binary Operator
-    Method Name      :
-    Signature        :
-    Input Parameters :
-    Return Types     :
-    Variants         :
+    Signature        :  T apply(T t1, T t2);
     
 ##### BiPredicate
-    Method Name      :
-    Signature        :
-    Input Parameters :
-    Return Types     :
-    Variants         :
+    Signature        :  boolean test(T t, U u);
     
 ##### BiConsumer
-    Method Name      :
-    Signature        :
-    Input Parameters :
-    Return Types     :
-    Variants         :
+    Signature        :   void accept(T t, U u);
     
 ##### BiFunction
-    Method Name      :
-    Signature        :
-    Input Parameters :
-    Return Types     :
-    Variants         :
-
+    Signature        :  R apply(T t, U u);
+    
 ##### Lambda and Exception:
     None of the predefined functional interfaces in Java allow for a checked exception to be thrown. 
     You have two options if you need a lambda expression to throw an exception 
@@ -135,7 +99,7 @@ with @FunctionalInterface.
        expr will be used to call the instance method and args will go as parameters to it
     
     c) ClassName::instanceMethod
-       (arg0,rest) -> arg0.instanceMethod(res)
+       (arg0, rest) -> arg0.instanceMethod(res)
        arg0 will be used for calling the instance method while rest of the args will go as parameters to it
    
 ##### Constructor Reference 
@@ -153,7 +117,7 @@ with @FunctionalInterface.
        Function<Integer,Apple>  f1 = Apple::new        //method reference
                           Apple a1 = f1.apply(110);
                          
-       Function<Integer,Apple>  f1 = Apple::new        //lambda expression
+       Function<Integer,Apple>  f1 = (n)->new Apple(n);        //lambda expression
                           Apple a1 = f1.apply(110);
 
 ##### Using Default Methods:
