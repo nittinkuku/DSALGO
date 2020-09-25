@@ -65,3 +65,6 @@ My favorite search engine is **[Duck Duck Go](https://duckduckgo.com "This is a 
 ***
 ---
 _________________
+
+![](../../../../../../resources/adapter/Pic-1.jpg)
+![](path to image file)
