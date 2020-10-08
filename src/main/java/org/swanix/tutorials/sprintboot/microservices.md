@@ -79,13 +79,26 @@ In Microservice Architecture, each service is self-contained and implements a Si
 #Microservice with Spring Boot :
 
 #####Eureka Server and Client
-    @EnableEurekaServer  
+    @EnableEurekaServer   
+    default port - 8761
+    
     @EnableEurekaClient
-
+    eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka/
+    
+    @EnableEurekaClient vs @EnableDiscoveryClient
+    
+    There are multiple implementations of Discovery Service like zookeeper,counsel,eureka etc. 
+    
+    @EnableDiscoveryClient - It will pick up whatever discovery Service Implementation is there in the classpath
+    @EnableEurekaClient -  This only works with eureka. 
+    
+    If eureka is on our classpath, both are effectively same
+        
+    
 #####Load Balancing
     @LoadBalanced
 
-#####Circuit Breaker - Hystrix
+#####Hystrix - Circuit Breaker
 
     @EnableCircuitBreaker
     
@@ -272,6 +285,24 @@ save the encrypted values in the properties file
 
 Spring cloud config server has the ability to encrypt and decrypt the values. encrypt the values using spring cloud and save it
 
+
+##Zuul - API Gateway
+
+    @EnableZuulProxy
+    
+    zuul.routes.{routeURL}={MicroserviceName}
+    e.g. 
+        zuul.routes.producer=ProducerMS
+        http://localhost:8081/producer/{rest of the path}
+    
+    zuul.host.socket-timeout-millis=100000
+    ribbon.eureka.enabled=true
+    ribbon.ReadTimeout=60000
+    ribbon.ConnectTimeout=60000
+    hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds=100000
+    
+##Swagger
+Swagger is a tool for
 
 
 
