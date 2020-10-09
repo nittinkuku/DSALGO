@@ -52,8 +52,8 @@ public class Swati_Codelity {
         int totalLength = A.length;
         int fairIndexesCount = 0;
 
-        long sumA = 0;
-        long sumB = 0;
+        int sumA = 0;
+        int sumB = 0;
 
         for (int i = 0; i < totalLength; i++) {
             sumA = sumA + A[i];

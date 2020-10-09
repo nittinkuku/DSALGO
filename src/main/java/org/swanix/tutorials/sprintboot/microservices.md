@@ -302,8 +302,82 @@ Spring cloud config server has the ability to encrypt and decrypt the values. en
     hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds=100000
     
 ##Swagger
-Swagger is a tool for
+Swagger is a tool for automatically generating API Documentation.
 
+    @EnableSwagger2
+    
+    http://localhost:8080/v2/api-docs
+    
+**Swagger UI:**
+    you can add Swagger HTML UI as well and then access it at
+    
+    http://localhost:8080/swagger-ui.html
+    
+**Customizing Swagger:**  
+
+    @Bean
+    public Docket swaggerConfiguration(){
+    
+        return new Docket(DocumentationType.SWAGGER_2)
+                   .select()
+                   .paths(PathSelectors.ant("/api/*"))      //so that the default springboot paths like error does not show up and only our application paths are there
+                   .apis(RequestHandlerSelectors.basePackage("com.sample"))   //again for excluding all spring related configuration
+                   .build()
+                   .apiInfo(apiDetails());      // for metadata
+    }
+    
+    private ApiInfo apiDetails(){
+        return new ApiInfo(
+                        "Address book API",
+                        "Sample API for Java Brains tutorial",
+                        "1.0",
+                        "Free to use",
+                        new springfox.documentation.service.Contact("Contact Name","http://www.website.com","a@b.com"),
+                        "API License",
+                        "http://www.website.com",
+                        Collections.emptyList());
+    }
+
+**Adding additional details to APIs**
+
+    @ApiOperation 
+    @ApiParam
+    @ApiModel
+    @ApiModelProperty
+    
+    @GetMapping("/{id}")
+    @ApiOperation(value = "Finds Contacts by id",
+                  notes = "Provide an id to look up specific contact from the address book",
+                  response = Contact.class)
+    public Contact getContact(@ApiParam(value = "Id value for the contact you need to retrieve", required =true)
+                                        @PathVariable String id){
+        return contacts.get(id);
+    }
+    
+    @ApiModel(description = "Details about the contact")
+    public class Contact{
+    
+        @ApiModelProperty(notes = "The unique id of the contact")
+        private String id;
+        @ApiModelProperty(notes = "Ther person's name")
+        private String name;
+        @ApiModelProperty(notes = "The Person's phone number")
+        private String phone;
+        
+        //Getter and Setters
+    }
+    
+#Logging In SpringBoot
+It includes slf4j and Logback libraries included by default. Logback is kind of successor of log4j.
+Log4j2 and Logback are the latest libraries and either of them can be used.
+
+    Logger logger = LoggerFactory.getLogger(HomeResource.class);
+    
+    logging.level.root=INFO                 
+    logging.level.io.javabrains=TRACE    //only io.javabrains will have logging at TRACE level, while all others at INFO
+    
+    
+    
 
 
 
