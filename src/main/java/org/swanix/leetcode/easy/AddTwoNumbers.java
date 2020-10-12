@@ -1,4 +1,4 @@
-package org.swanix.leetcode;
+package org.swanix.leetcode.easy;
 
 public class AddTwoNumbers {
     public static void main(String[] args) {

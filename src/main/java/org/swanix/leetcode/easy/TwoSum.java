@@ -1,4 +1,4 @@
-package org.swanix.leetcode;
+package org.swanix.leetcode.easy;
 
 import java.util.HashMap;
 import java.util.Map;
