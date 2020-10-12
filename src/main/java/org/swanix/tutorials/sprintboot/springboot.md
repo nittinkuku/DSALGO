@@ -114,27 +114,4 @@ It also automatically going to convert everything we return to a jsonResponse.
 
 
 
-#JWT
 
-JWT (Json Web Token) is used for authorization. After the user is authenticated by server, it creates a JWT token for the client and give it. This JWT is then sent by client with every subsequent request to the server.
-
-**Headers:**
-	Authorization: Bearer JWT
-
-
-**JWT Structure:**
-
-It has 3 parts separated by **.** (DOT)
-
-    Header.Payload.Signature
-    
-    Header    		//encoded in base 64 
-    Payload 		//encoded in base 64
-    Signature		//signature given by server based on the values of header, payload and a secret key which only server knows	
-
-Even if a malicious client changes the values in payload or header, the server would be able to tell as the signature for these new values will not match with what is already there in the JWT.
-JWT does not contain any sensitive information like password etc. but just enough to identify the user.
-
-**Notes:** 
-1. Encoded base 64 - base 64 allows you to convert normal string into a stream of characters.
-2. There should not be any sensitive information in the payload as it can be easily decoded and read.
