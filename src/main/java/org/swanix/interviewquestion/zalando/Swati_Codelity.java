@@ -1,4 +1,4 @@
-package org.swanix;
+package org.swanix.interviewquestion.zalando;
 
 public class Swati_Codelity {
     public static void main(String[] args) {

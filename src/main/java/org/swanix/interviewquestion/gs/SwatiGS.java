@@ -1,4 +1,4 @@
-package org.swanix;
+package org.swanix.interviewquestion.gs;
 
 import java.util.HashSet;
 

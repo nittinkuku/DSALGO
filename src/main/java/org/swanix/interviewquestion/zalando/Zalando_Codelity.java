@@ -1,4 +1,4 @@
-package org.swanix;
+package org.swanix.interviewquestion.zalando;
 
 import java.util.stream.IntStream;
 

@@ -1,4 +1,4 @@
-package org.swanix;
+package org.swanix.interviewquestion.linefukoka;
 
 import java.util.ArrayList;
 import java.util.List;
