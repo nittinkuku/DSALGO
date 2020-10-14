@@ -22,8 +22,9 @@ public class GenerateParentheses {
         if (close < open)
             backtrack(ans, cur+")", open, close+1, max);
     }
-
 }
+
+
 
 /*
 Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
