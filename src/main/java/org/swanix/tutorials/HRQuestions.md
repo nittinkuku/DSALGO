@@ -48,8 +48,9 @@ How to answer:
     
     
     Depends on the company
-    I was looking for opportunities in Germany and when I came across zalando. I tried to search a bit abou the compnay and also asked people on linkedin. 
-    Everyone has a great things to say about the work and work-culture.   
+    I was looking for opportunities in Germany and when I came across zalando. I tried to search a bit about the compnay and also asked people on linkedin. 
+    Everyone has a great things to say about the work and work-culture.
+       
     
     
             
@@ -94,7 +95,9 @@ How to answer:
 4. Talk about how you are helping others
     
             
-    ToDo
+    ToDo:
+    
+    
     
     
 ####Why should we hire you: 
@@ -113,28 +116,6 @@ Formula :
     2.   
         
     
-    
-####Where do you see in 5 years
-Interviewer wants to know :
-1. Are you ambitious
-2. Long-term goals
-
-Common Mistakes:
-1. In your place
-2. As the CEO of this company
-3. Somewhere else
-
-How to answer:
-1. Long term career
-2. Showcase your enthusiasm
-
-
-    1. I am interested in programming and so would like to improve my skills and be an architect. 
-       I would love to be able conceive and desing big, scalable systems.
-    
-    
-    
-
 ####Do you have any Questions
 Interviewer wants to know :
 1. How interested are you
@@ -153,4 +134,24 @@ How to answer:
     1. Are you hiring for some specific roles or is it for the pool.
     2. What technologies that are being used in the project.
     3. How does a typical day looks like ? what are the timings ?
-        
+    
+
+
+
+####Where do you see in 5 years
+Interviewer wants to know :
+1. Are you ambitious
+2. Long-term goals
+
+Common Mistakes:
+1. In your place
+2. As the CEO of this company
+3. Somewhere else
+
+How to answer:
+1. Long term career
+2. Showcase your enthusiasm
+
+
+    1. I am interested in programming and so would like to improve my skills and be an architect. 
+       I would love to be able conceive and desing big, scalable systems.        
