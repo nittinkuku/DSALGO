@@ -2,11 +2,18 @@
 Apache Kafka is an open source distributed event streaming platform used by thousands of companies for high-performance data pipelines,
 streaming analytics, data integration, and mission-critical applications.
 
+**Advantages of Kafka**
+1. Distributed
+2. Horizontally scalable
+3. High Performs
+4. Resilient architecture
+5. Fault Tolerant
+
 **Use Cases:**
 1. De-coupling of system dependencies
 2. Message System
 3. Activity Tracking
-4. Gathering metrics from many different locations
+4. Gathering metrics from different locations
 5. Application logs gathering
 6. Stream processing (with the Kafka Streams API or Spark for example) 
 7. Integration with Spark, Flink, Storm, Hadoop and many other Big Data technologies.
@@ -16,7 +23,7 @@ Source Systems -> Producers -> Kafka -> Consumers -> Target Systems
 ###Cluster: 
 
 ###Broker
-A kafka cluster is composed of multiple brokers (servers). Each broker is identified with its ID (integer). 
+A kafka cluster composed of multiple brokers (servers). Each broker is identified with its ID (integer). 
 Each broker contains certain topic partitions. After connecting to any broker, you will be connected to the entire cluster.
 ###Topic
 Topic is a particular stream of data. It is similar to a table in database. You can have as many topics as you want.
