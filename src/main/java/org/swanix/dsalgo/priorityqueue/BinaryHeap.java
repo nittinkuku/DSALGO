@@ -2,6 +2,7 @@ package org.swanix.dsalgo.priorityqueue;
 
 import org.swanix.util.DSAlgoUtil;
 
+//max heap
 public class BinaryHeap {
     private int size;
     private int[] array;
