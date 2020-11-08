@@ -210,11 +210,105 @@ For publishing images to Docker
     docker push learnbook/webserver
 The docker push command is smart enough to push only the bits that differ from the base nginx image we used, since it is already stored in the Docker Hub.
 
+#####How to Reduce size of your Image
+Image Size is influenced by:
+1. The files included in your image
+2. The base image size
+3. Image layers
 
+- Avoid copy instructions that are too Broad. For e.g. COPY ..
+    
+- You can use a .dockerignore file at the root of your build context that lists files and folders that should be excluded from the build like a .gitignore file
+   Sample .dockerignore file
+   
+   
+    # Ignore .git folder
+    .git
+    # Ignore  Typescript files in any folder on subfolder
+    **/*.ts 
+  
+- Many images you can use as base images have smaller variants. For e.g. Debian:8-slim instead of Debian:8
 
+- Do the steps that are likely to change as late as possible in the docker file. Reason Below : 
+  
+    
+    When creating an image, Docker reads each instruction in order and the resulting partial image is kept separate; it is cached and labeled with a unique ID.
+    
+    Such caching is very effective because it is used at different moments of an image file:
+    
+    1. In a future build, Docker will use the cached part instead of creating it as long as it is possible.
+    2. When pushing a new version of the image to the Registry, the common part is not pushed.
+    3. When pulling an image from a registry, the common part you already have is not pulled.
+    
+    The caching mechanism can be summed up as follows: 
+    when building a new image, Docker will try its best to skip all instructions up to the first instruction that actually chagnes the resulting image.
+    
+##Multi-Stage Dockerfiles
+    From fat-image AS builder
+    ....
+    From small-image
+    COPY --from=builder /result .
+    ....
 
+It merges two images, but only the last one will be kept as the result of the docker build command.  
+The filesystem that has been created in the first image, named builder, is made available to the second image thanks to the --from argument of the COPY command. 
+This technique allows you to benefit from the tools available in fat-image while getting an image with only the environment defined in the small-image it’s based on.  
+Moreover, you can have many stages in a Dockerfile file when necessary.
 
+##JAVA 
+JAVA program 
 
+    class Hello{  
+      public static void main(String[] args) {
+        System.out.println("I'm Java running in a container.");  
+      }
+    }
+    
+Docker File 
+
+    # Use an image with the SDK for compilation
+    FROM openjdk:8-jdk-alpine AS builder
+    WORKDIR /out
+    # Get the source code inside the image 
+    COPY *.java .
+    # Compile source code
+    RUN javac Hello.java
+    
+    # Create a lightweight image 
+    FROM openjdk:8-jre-alpine
+    # Copy compiled artifacts from previous image
+    COPY --from=builder /out/*.class .
+    CMD ["java", "Hello"]
+    
+The resulting image is published as learnbook/java
+
+#####Restarting Mode
+When creating a container, you have the choice to set a restart mode. It tells Docker what to do when a container stops. A restart mode is set with the --restart switch.
+    
+    docker run -d -p 80 --restart always nginx
+It works great. Should the container start, or the Docker host itself restart, the container will restart so that it has a high uptime.  
+But it actually works too well; if you try to stop the container using the docker stop command, it will not stop.
+
+ If you want your container to always be running except when you explicitly stop it, use the unless_stopped restart mode:
+ 
+    docker run -d -p 80 --restart unless-stopped nginx
+    
+#####Monitoring
+    docker stats    
+
+#####Reclaim your Disk
+Run below commands to remove the items that you don't need :
+
+    docker container prune -f
+    docker volume prune -f
+    docker image prune -f
+only dangling images are removed. Unused images are kept, which is fine if a network connection is scarce or unavailable because it means you keep base images that may be useful later on.   
+If you want to remove all unused images, just use the following command:
+    
+        docker image prune --all
+        
+        
+            
 
 #Kubernetes
 Kubernetes is an open-source platform used for maintaining and deploying a group of containers
