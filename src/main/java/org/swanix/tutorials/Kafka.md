@@ -61,3 +61,8 @@ Kafka stores the offset at which a consumer group has been reading
 The offsets commit live in a kafka topic name "_conumer_offsets"
 When a consumer has processed data received from kafka, it should be commiting the offsets
 If a consumer process dies, it will be able to read back from where it felt off thanks to consumer offsets.
+
+
+
+
+

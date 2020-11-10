@@ -69,9 +69,13 @@ In Microservice Architecture, each service is self-contained and implements a Si
 - Granular Scaling
 
 
+##CAP Theorem
+According to CAP Theorem, three characteristics exist in a distributed system:
+1. Consistency : means that all of the system have the same information
+2. Availability : means that no system stops working because other failed
+3. Partition Tolerance : means that a system will continue to work in case of arbitrary package loss in the network.
 
-
-
+The CAP Theorem states that a system can have a maximum of two features out of these three.
 
 
 

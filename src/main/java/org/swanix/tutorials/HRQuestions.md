@@ -35,6 +35,14 @@ How to answer:
     2.  As a senior in the team, I have the added reponsibility of guiding and mentoring the junior team members. We have to reviewing their code. 
         While Everyone is inovled in discussion and decisons that are taken but as a senior we have the final responsibility and ownership of the task to take it through.
 
+    CCAR :
+    The Comprehensive Capital Analysis and Review (CCAR) is an annual exercise by the Federal Reserve 
+    to assess whether the largest bank holding companies operating in the United States have sufficient capital to continue operations 
+    throughout times of economic and financial stress and that they have robust, forward-looking capital-planning processes that account for their unique risks.
+    
+    As part of this exercise, the Federal Reserve evaluates institutions' capital adequacy, internal capital adequacy assessment processes, 
+    and their individual plans to make capital distributions, such as dividend payments or stock repurchases.
+
 ####Why do you want to work for us:
 Interviewer wants to know :
 1. Why do you want 'this' job
