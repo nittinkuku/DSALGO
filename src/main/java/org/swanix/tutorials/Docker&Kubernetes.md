@@ -2,18 +2,18 @@
 Docker is a tool which is used to automate the deployment of applications in lightweight containers so that applications can work efficiently in different environments.
 Just as Java gave us WORA (Write Once Run Anywhere), similarly Docker gives us PODA (Package Once Deploy Anywhere).
 
-###Docker Commands   
+###Docker Commands
 
-#####docker run 
+#####docker run
     docker run hello-world 
 1. This command asks docker to create and run a container based on the hello-world image.
-2. If the image is not present on the disk/system, docker download it from a default registry, the docker hub
-3. docker created a container based on the hello-world image
+2. If the image is not present on the disk/system, docker will download it from a default registry, the docker hub
+3. Docker creates a container based on the hello-world image
 4. It runs the image.
 #####docker --help
      docker run --help
 This will list all the command that can are available to be used
-#####docker ps 
+#####docker ps
 lists the containers that are still running. Add the -a switch in order to see containers that have stopped
 #####docker logs
 retrieves the logs of a container, even when it has stopped
@@ -22,10 +22,11 @@ retrieves the logs of a container, even when it has stopped
     --until 
     --tail
 #####docker inspect
-gets detailed information about a running or stopped container
+gets detailed information about a running or stopped container 
+
 #####docker stop
 stops a running container
-#####docker rm   
+#####docker rm
 deletes a container
 #####docker container prune -f
 this is the equivalent of running one docker rm command for each stopped container
@@ -33,7 +34,7 @@ this is the equivalent of running one docker rm command for each stopped contain
     docker run -d alphine
     docker run -d alpine ping www.docker.com
 -d this is used for running the docker in background, that is detach mode. This is used for running the container in detach mode,   
-we don't get the output of the container rather just the id of the container
+we don't get the output of the container rather just the id of the container.
 #####docker -p
     docker run -d -p 8085:80 nginx 
 The -p switch takes two parameters; the incoming port you want to open on the host machine, and the port to which it should be mapped inside the container.
@@ -96,7 +97,7 @@ In reality, server container would be long running, so you would run it without 
     -t/-it : allows you to stop the container using Ctrl-C from the cmd line
     -rm : ensures that the container is deleted once it has stopped
     
-####rmi 
+####rmi
 When we build images using build command, they are created in our local machines. We could remove the images from our local machine using image name or image ID
 
     docker rmi c067edac5ec1
