@@ -29,7 +29,7 @@ Each broker contains certain topic partitions. After connecting to any broker, y
 Topic is a particular stream of data. It is similar to a table in database. You can have as many topics as you want.
 #####Partition
 Topics are split in partitions. Each partition is ordered and each message within a partition gets an incremental id, called offsets.
-Data is pushed to a topic and not to a partition.Data is assigned randomly to a partition unless a key is provided.
+Data is pushed to a topic and not to a partition. Data is assigned randomly to a partition unless a key is provided.
 #####Replication
 Topic should have a replication > 1 (usually between 2 and 3). This way is a broker is down  and another broker can serve the data
 #####Leader
